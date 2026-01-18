@@ -21,7 +21,7 @@ yarn-error.log*
 pnpm-debug.log*
 
 # 編輯器與 IDE 設定
-.vscode/
+#.vscode/
 .idea/
 *.swp
 *.swo
