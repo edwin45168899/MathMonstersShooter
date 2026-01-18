@@ -182,7 +182,7 @@ export class GameEngine {
         this.updateClouds(dt); // Update background clouds
 
         // 0. Win Condition
-        if (this.score >= 20) {
+        if (this.score >= 400) {
             this.gameWin();
             return;
         }
