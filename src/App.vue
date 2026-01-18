@@ -23,6 +23,11 @@ const startGame = () => {
     score.value = 0
     lives.value = 3
     currentOptions.value = []
+    
+    // Explicitly restart game logic
+    setTimeout(() => {
+        if(gameCanvas.value) gameCanvas.value.restartGame()
+    }, 50)
 }
 
 // ... (keep existing methods)

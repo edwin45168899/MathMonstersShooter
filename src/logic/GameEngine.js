@@ -65,14 +65,15 @@ export class GameEngine {
         this.lives = 3;
         this.level = 1;
         this.spawnInterval = 2500;
+        this.slowDownTimer = 0;
         this.entityManager.reset();
         this.paused = false;
+        this.state = 'playing';
 
         // Set player init pos
         this.entityManager.player.x = this.width / 2;
         this.entityManager.player.y = this.height - (350 * Math.max(0.6, this.scaleFactor));
 
-        this.state = 'playing';
 
         this.callbacks.onScore(this.score);
         this.callbacks.onLives(this.lives);
@@ -80,6 +81,15 @@ export class GameEngine {
 
         this.lastTime = performance.now();
         requestAnimationFrame(this.loop);
+    }
+
+    resume() {
+        if (this.state !== 'playing' || this.paused) {
+            this.state = 'playing';
+            this.paused = false;
+            this.lastTime = performance.now();
+            requestAnimationFrame(this.loop);
+        }
     }
 
     stop() {

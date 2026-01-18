@@ -41,10 +41,10 @@ watch(() => props.active, (newVal) => {
   if (newVal && engine) {
     setTimeout(() => { // slight delay to ensure canvas size is ready
         engine.resize(canvasRef.value.clientWidth, canvasRef.value.clientHeight)
-        engine.start()
+        engine.resume()
     }, 100)
   } else if (!newVal && engine) {
-    engine.stop()
+    engine.setPaused(true)
   }
 })
 
@@ -52,11 +52,18 @@ const handleAnswer = (val) => {
     if (engine) engine.handleAnswer(val)
 }
 
+const restartGame = () => {
+    if(engine) {
+         engine.resize(canvasRef.value.clientWidth, canvasRef.value.clientHeight)
+         engine.start()
+    }
+}
+
 const setPaused = (val) => {
     if (engine) engine.setPaused(val)
 }
 
-defineExpose({ handleAnswer, setPaused })
+defineExpose({ handleAnswer, setPaused, restartGame })
 </script>
 
 <template>
