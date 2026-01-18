@@ -4,6 +4,7 @@ import { TTSManager } from '../logic/TTSManager.js'
 
 defineEmits(['start'])
 const { locale, t } = useI18n()
+const version = __APP_VERSION__
 
 const speak = (text) => {
     TTSManager.speak(text, locale.value)
@@ -26,6 +27,7 @@ const toggleLang = () => {
     <h2 class="neon-text">{{ $t('subtitle') }}</h2>
     <p>{{ $t('desc') }}</p>
     <button class="neon-button" @click="$emit('start')">{{ $t('start') }}</button>
+    <div class="version">v{{ version }}</div>
   </div>
 </template>
 
@@ -97,5 +99,12 @@ p {
     padding: 5px 15px;
     cursor: pointer;
     border-radius: 15px;
+}
+
+.version {
+    margin-top: 1rem;
+    font-size: 0.8rem;
+    color: #666;
+    font-family: monospace;
 }
 </style>
