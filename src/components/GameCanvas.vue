@@ -51,7 +51,11 @@ const handleAnswer = (val) => {
     if (engine) engine.handleAnswer(val)
 }
 
-defineExpose({ handleAnswer })
+const setPaused = (val) => {
+    if (engine) engine.setPaused(val)
+}
+
+defineExpose({ handleAnswer, setPaused })
 </script>
 
 <template>

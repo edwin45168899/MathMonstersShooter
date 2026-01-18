@@ -38,6 +38,16 @@ const handleAnswer = (val) => {
         gameCanvas.value.handleAnswer(val)
     }
 }
+
+const onPause = () => {
+    gameState.value = 'paused';
+    if(gameCanvas.value) gameCanvas.value.setPaused(true);
+}
+
+const resumeGame = () => {
+    gameState.value = 'playing';
+    if(gameCanvas.value) gameCanvas.value.setPaused(false);
+}
 </script>
 
 <template>
@@ -55,7 +65,7 @@ const handleAnswer = (val) => {
     <StartScreen v-if="gameState === 'start'" @start="startGame" />
     
     <div v-if="gameState === 'playing'">
-        <GameHUD :score="score" :lives="lives" />
+        <GameHUD :score="score" :lives="lives" @pause="onPause" />
         <AnswerPanel :options="currentOptions" @answer="handleAnswer" />
     </div>
 
@@ -63,6 +73,14 @@ const handleAnswer = (val) => {
         <h1 class="neon-text" style="color: #ff3366">{{ $t('game_over') }}</h1>
         <h2>{{ $t('final_score') }} {{ score }}</h2>
         <button class="neon-button" @click="startGame">{{ $t('retry') }}</button>
+    </div>
+
+    <!-- Pause Menu -->
+    <div v-if="gameState === 'paused'" class="pause-screen glass">
+        <h1 class="neon-text">PAUSED</h1>
+        <button class="neon-button" @click="resumeGame">RESUME</button>
+        <div style="height: 20px"></div>
+        <button class="neon-button" @click="gameState = 'start'">EXIT</button>
     </div>
   </div>
 </template>
@@ -130,5 +148,23 @@ const handleAnswer = (val) => {
   background: var(--primary-color);
   color: #000;
   box-shadow: 0 0 30px var(--primary-color);
+}
+
+.pause-screen {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 3rem;
+  text-align: center;
+  border-radius: 20px;
+  border: 2px solid var(--primary-color);
+  background: rgba(18, 18, 18, 0.95);
+  z-index: 20;
+}
+.pause-screen h1 {
+  font-size: 3rem;
+  margin-bottom: 2rem;
+  color: var(--primary-color);
 }
 </style>

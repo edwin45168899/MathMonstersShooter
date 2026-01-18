@@ -24,11 +24,22 @@ export class GameEngine {
         this.lives = 3;
         this.level = 1;
 
+        this.paused = false; // Pause state
+
         this.loop = this.loop.bind(this);
     }
 
     init() {
         this.entityManager.reset();
+    }
+
+    // Pause control
+    setPaused(val) {
+        this.paused = val;
+        if (!val) {
+            this.lastTime = performance.now();
+            requestAnimationFrame(this.loop);
+        }
     }
 
     resize(w, h) {
@@ -40,6 +51,7 @@ export class GameEngine {
             this.entityManager.player.x = w / 2;
             this.entityManager.player.y = h - 180;
         }
+        this.draw(); // Redraw on resize if paused
     }
 
     start() {
@@ -48,6 +60,7 @@ export class GameEngine {
         this.level = 1;
         this.spawnInterval = 2500;
         this.entityManager.reset();
+        this.paused = false;
 
         // Set player init pos
         this.entityManager.player.x = this.width / 2;
@@ -68,7 +81,7 @@ export class GameEngine {
     }
 
     handleAnswer(value) {
-        if (this.state !== 'playing') return;
+        if (this.state !== 'playing' || this.paused) return; // Ignore input if paused
 
         const closestMonster = this.getClosestMonster();
         if (!closestMonster) return;
@@ -101,6 +114,7 @@ export class GameEngine {
 
     loop(timestamp) {
         if (this.state !== 'playing') return;
+        if (this.paused) return; // Stop loop if paused
         const dt = timestamp - this.lastTime;
         const safeDt = Math.min(dt, 50);
         this.lastTime = timestamp;
