@@ -23,10 +23,11 @@ export class GameEngine {
         this.slowDownTimer = 0;
         this.levelUpRestTimer = 0;
         this.consecutiveWrong = 0; // Track consecutive wrong answers
+        this.victoryTimer = null; // Timer for victory delay
+        this.bulletRadius = 5; // Initial bullet radius
 
         this.score = 0;
         this.lives = 3;
-        this.level = 1;
         this.level = 1;
         this.scaleFactor = 1; // Default scale
 
@@ -71,7 +72,9 @@ export class GameEngine {
     }
 
     start() {
+        if (this.victoryTimer) clearTimeout(this.victoryTimer);
         this.score = 0;
+        this.bulletRadius = 5;
         this.lives = 3;
         this.level = 1;
         this.spawnInterval = 2500;
@@ -107,6 +110,7 @@ export class GameEngine {
     }
 
     stop() {
+        if (this.victoryTimer) clearTimeout(this.victoryTimer);
         this.state = 'idle';
         SoundManager.stopBGM();
     }
@@ -124,12 +128,19 @@ export class GameEngine {
                 this.entityManager.player.x,
                 this.entityManager.player.y,
                 closestMonster.x,
-                closestMonster.y
+                closestMonster.y,
+                this.bulletRadius
             );
+            // Increase bullet size on hit
+            this.bulletRadius = Math.min(25, this.bulletRadius + 2);
         } else {
             this.consecutiveWrong++;
             SoundManager.wrong();
-            this.slowDownTimer = 1000; // Slow down for 1 second
+            this.slowDownTimer = 5000; // Slow down for 1 second
+
+            // Decrease bullet size on wrong answer
+            this.bulletRadius = Math.max(5, this.bulletRadius - 2);
+
             this.callbacks.onWrongAnswer && this.callbacks.onWrongAnswer();
         }
     }
@@ -171,7 +182,7 @@ export class GameEngine {
         this.updateClouds(dt); // Update background clouds
 
         // 0. Win Condition
-        if (this.score >= 400) {
+        if (this.score >= 20) {
             this.gameWin();
             return;
         }
@@ -352,8 +363,13 @@ export class GameEngine {
 
     gameWin() {
         this.state = 'gamewin';
-        SoundManager.stopBGM();
-        this.callbacks.onGameOver(this.score, true); // true = win
+        SoundManager.playVictoryBGM();
+
+        // Delay Game Over screen by 10 seconds to enjoy the music
+        if (this.victoryTimer) clearTimeout(this.victoryTimer);
+        this.victoryTimer = setTimeout(() => {
+            this.callbacks.onGameOver(this.score, true); // true = win
+        }, 10000);
     }
 
     draw() {

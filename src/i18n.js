@@ -16,7 +16,7 @@ const messages = {
         paused: 'PAUSED',
         resume: 'RESUME',
         exit: 'EXIT',
-        you_win: 'MISSION COMPLETE!'
+        you_win: 'CONGRATULATIONS!'
     },
     zh: {
         title: '數學怪物',

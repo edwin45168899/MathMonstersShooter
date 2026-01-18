@@ -23,7 +23,7 @@ export class EntityManager {
         });
     }
 
-    addBullet(startX, startY, targetX, targetY) {
+    addBullet(startX, startY, targetX, targetY, radius = 5) {
         const angle = Math.atan2(targetY - startY, targetX - startX);
         const speed = 15;
         this.bullets.push({
@@ -31,7 +31,7 @@ export class EntityManager {
             y: startY,
             vx: Math.cos(angle) * speed,
             vy: Math.sin(angle) * speed,
-            radius: 5,
+            radius: radius,
             color: '#00F3FF',
             alive: true
         });
