@@ -1,5 +1,9 @@
 import { createI18n } from 'vue-i18n'
 
+/**
+ * 國際化 (i18n) 設定
+ * 定義支援的語言 (英文、繁體中文) 及其對應的介面文字
+ */
 const messages = {
     en: {
         title: 'MATH MONSTERS',
@@ -38,8 +42,9 @@ const messages = {
 }
 
 export const i18n = createI18n({
-    legacy: false, // Use Composition API
-    locale: 'zh', // Default locale
-    fallbackLocale: 'en',
+    legacy: false, // 使用 Vue 3 Composition API 模式
+    locale: 'zh', // 預設語言：繁體中文
+    fallbackLocale: 'en', // 備援語言：英文
     messages
 })
+
