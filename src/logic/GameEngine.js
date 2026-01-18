@@ -21,6 +21,7 @@ export class GameEngine {
         this.spawnTimer = 0;
         this.spawnInterval = 2500;
         this.slowDownTimer = 0;
+        this.levelUpRestTimer = 0;
 
         this.score = 0;
         this.lives = 3;
@@ -67,6 +68,7 @@ export class GameEngine {
         this.level = 1;
         this.spawnInterval = 2500;
         this.slowDownTimer = 0;
+        this.levelUpRestTimer = 0;
         this.entityManager.reset();
         this.paused = false;
         this.state = 'playing';
@@ -162,6 +164,7 @@ export class GameEngine {
         if (this.score > this.level * 100) {
             this.level++;
             this.spawnInterval = Math.max(1000, 2500 - (this.level * 150));
+            this.levelUpRestTimer = 5000; // 5 seconds of rest
         }
 
         // 2. Spawning
@@ -207,9 +210,17 @@ export class GameEngine {
 
         // Handle slow down effect
         let globalSpeedMultiplier = 1;
+
+        // 1. Wrong Answer Slow Down (Highest Priority/Biggest Impact)
         if (this.slowDownTimer > 0) {
             this.slowDownTimer -= dt;
-            globalSpeedMultiplier = 0.5; // Slow down by half
+            globalSpeedMultiplier *= 0.5; // Slow down by half
+        }
+
+        // 2. Level Up Rest (20% slow down)
+        if (this.levelUpRestTimer > 0) {
+            this.levelUpRestTimer -= dt;
+            globalSpeedMultiplier *= 0.8; // Slow down by 20%
         }
 
         const escapedCount = this.entityManager.update(speedFactor, this.width, this.height, globalSpeedMultiplier);
