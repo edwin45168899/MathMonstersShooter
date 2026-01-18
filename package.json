@@ -1,11 +1,11 @@
 {
-  "name": "temp-project",
+  "name": "math-monsters-shooter",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build --mode production",
     "preview": "vite preview"
   },
   "dependencies": {
