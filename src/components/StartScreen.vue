@@ -35,7 +35,7 @@ const toggleLang = () => {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  padding: 3rem;
+  padding: 1.5rem;
   text-align: center;
   border-radius: 20px;
   border: 2px solid var(--primary-color);
@@ -44,20 +44,20 @@ const toggleLang = () => {
 }
 
 h1 {
-  font-size: 3rem;
+  font-size: 2rem;
   margin: 0;
   color: var(--primary-color);
   letter-spacing: 2px;
 }
 h2 {
-  font-size: 2.5rem;
+  font-size: 1.5rem;
   margin: 0 0 2rem 0;
   color: var(--secondary-color);
   letter-spacing: 4px;
 }
 p {
-  font-size: 1.2rem;
-  margin-bottom: 3rem;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
   color: #aaa;
 }
 
@@ -65,8 +65,8 @@ p {
   background: transparent;
   color: var(--primary-color);
   border: 2px solid var(--primary-color);
-  padding: 1rem 3rem;
-  font-size: 1.5rem;
+  padding: 0.5rem 1.5rem;
+  font-size: 1.2rem;
   cursor: pointer;
   text-transform: uppercase;
   font-weight: bold;

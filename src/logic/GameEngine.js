@@ -23,6 +23,7 @@ export class GameEngine {
         this.score = 0;
         this.lives = 3;
         this.level = 1;
+        this.scaleFactor = 1; // Default scale
 
         this.paused = false; // Pause state
 
@@ -47,9 +48,13 @@ export class GameEngine {
         this.height = h;
         this.canvas.width = w;
         this.canvas.height = h;
+
+        // Calculate scale factor (Base width 600px)
+        this.scaleFactor = Math.min(1, w / 600);
+
         if (this.entityManager.player) {
             this.entityManager.player.x = w / 2;
-            this.entityManager.player.y = h - 180;
+            this.entityManager.player.y = h - (350 * Math.max(0.6, this.scaleFactor));
         }
         this.draw(); // Redraw on resize if paused
     }
@@ -64,7 +69,7 @@ export class GameEngine {
 
         // Set player init pos
         this.entityManager.player.x = this.width / 2;
-        this.entityManager.player.y = this.height - 180;
+        this.entityManager.player.y = this.height - (350 * Math.max(0.6, this.scaleFactor));
 
         this.state = 'playing';
 
@@ -199,10 +204,15 @@ export class GameEngine {
         const margin = 50;
         const x = Math.random() * (this.width - margin * 2) + margin;
 
+        // Calculate speed based on kills: Base 0.5 + 10% (0.05) per kill
+        const kills = Math.floor(this.score / 10);
+        const baseSpeed = 0.5;
+        const speed = baseSpeed * (1 + 0.1 * kills);
+
         this.entityManager.addMonster({
             x: x,
             y: -50,
-            speed: (0.5 + (this.level * 0.1)), // Slower speed for better playability
+            speed: speed,
             equation: problem.equation,
             answer: problem.answer,
             color: this.getRandomColor(),
@@ -261,27 +271,30 @@ export class GameEngine {
         ctx.fillStyle = '#FFB7E1'; // Pink body
 
         // Body (Ellipse)
+        const s = this.scaleFactor;
         ctx.beginPath();
-        ctx.ellipse(p.x, p.y, 25, 35, 0, 0, Math.PI * 2);
+        ctx.ellipse(p.x, p.y, 25 * s, 35 * s, 0, 0, Math.PI * 2);
         ctx.fill();
 
         // Wings (Rounded)
         ctx.fillStyle = '#A2E8FA'; // Cyan wings
         ctx.beginPath();
-        ctx.ellipse(p.x - 25, p.y + 10, 15, 10, -0.5, 0, Math.PI * 2);
+        ctx.ellipse(p.x - 25 * s, p.y + 10 * s, 15 * s, 10 * s, -0.5, 0, Math.PI * 2);
         ctx.fill();
         ctx.beginPath();
-        ctx.ellipse(p.x + 25, p.y + 10, 15, 10, 0.5, 0, Math.PI * 2);
+        ctx.ellipse(p.x + 25 * s, p.y + 10 * s, 15 * s, 10 * s, 0.5, 0, Math.PI * 2);
         ctx.fill();
 
         // Cockpit window
         ctx.fillStyle = '#FFFFFF';
         ctx.beginPath();
-        ctx.arc(p.x, p.y - 10, 10, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y - 10 * s, 10 * s, 0, Math.PI * 2);
         ctx.fill();
 
         // Draw Monsters
-        this.ctx.font = 'bold 24px "Arial Rounded MT Bold", "ZhuyinFont", sans-serif';
+        // Draw Monsters
+        const fs = Math.max(16, Math.floor(24 * this.scaleFactor));
+        this.ctx.font = `bold ${fs}px "Arial Rounded MT Bold", "ZhuyinFont", sans-serif`;
         this.ctx.textAlign = 'center';
         this.ctx.textBaseline = 'middle';
 
@@ -292,11 +305,11 @@ export class GameEngine {
 
             // Draw Monster Body (Circle)
             this.ctx.beginPath();
-            this.ctx.arc(m.x, m.y, m.radius * m.scale, 0, Math.PI * 2);
+            this.ctx.arc(m.x, m.y, m.radius * m.scale * this.scaleFactor, 0, Math.PI * 2);
             this.ctx.fill();
 
             // Draw Ears (Cute Bear Style)
-            const r = m.radius * m.scale;
+            const r = m.radius * m.scale * this.scaleFactor; // Apply scaleFactor
             this.ctx.beginPath();
             this.ctx.arc(m.x - r * 0.7, m.y - r * 0.7, r * 0.4, 0, Math.PI * 2); // Left ear
             this.ctx.arc(m.x + r * 0.7, m.y - r * 0.7, r * 0.4, 0, Math.PI * 2); // Right ear
@@ -344,7 +357,7 @@ export class GameEngine {
         this.ctx.fillStyle = '#FFFF00';
         for (let b of this.entityManager.bullets) {
             this.ctx.beginPath();
-            this.ctx.arc(b.x, b.y, b.radius, 0, Math.PI * 2);
+            this.ctx.arc(b.x, b.y, b.radius * this.scaleFactor, 0, Math.PI * 2);
             this.ctx.fill();
         }
         this.ctx.shadowBlur = 0;

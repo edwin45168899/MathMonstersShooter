@@ -130,7 +130,7 @@ const resumeGame = () => {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  padding: 3rem;
+  padding: 1.5rem;
   text-align: center;
   border-radius: 20px;
   border: 1px solid #ff3366;
@@ -140,12 +140,12 @@ const resumeGame = () => {
 }
 
 .gameover-screen h1 {
-    font-size: 4rem;
+    font-size: 2.5rem;
     margin: 0;
     text-shadow: 0 0 20px #ff3366;
 }
 .gameover-screen h2 {
-    font-size: 2rem;
+    font-size: 1.5rem;
     margin: 1rem 0 3rem 0;
     color: #fff;
 }
@@ -165,8 +165,8 @@ const resumeGame = () => {
   background: transparent;
   color: var(--primary-color);
   border: 2px solid var(--primary-color);
-  padding: 1rem 3rem;
-  font-size: 1.5rem;
+  padding: 0.5rem 1.5rem;
+  font-size: 1.2rem;
   cursor: pointer;
   text-transform: uppercase;
   font-weight: bold;
@@ -186,7 +186,7 @@ const resumeGame = () => {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  padding: 3rem;
+  padding: 1.5rem;
   text-align: center;
   border-radius: 20px;
   border: 2px solid var(--primary-color);
@@ -194,7 +194,7 @@ const resumeGame = () => {
   z-index: 20;
 }
 .pause-screen h1 {
-  font-size: 3rem;
+  font-size: 2rem;
   margin-bottom: 2rem;
   color: var(--primary-color);
 }

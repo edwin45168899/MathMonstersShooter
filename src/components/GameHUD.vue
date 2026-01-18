@@ -33,10 +33,10 @@ const onPauseClick = () => {
 <template>
   <div class="hud">
     <div class="score-row">
-        <div class="score">{{ $t('score') }} <span class="val">{{ score }}</span></div>
         <button class="mute-btn" @click="toggleMute">
             {{ isMuted ? '🔇' : '🔊' }}
         </button>
+        <div class="score">{{ $t('score') }} <span class="val">{{ score }}</span></div>
     </div>
     
     <div class="lives-container">
@@ -110,8 +110,8 @@ const onPauseClick = () => {
     border: 2px solid var(--primary-color);
     color: var(--primary-color);
     font-size: 1.2rem;
-    width: 35px;
-    height: 35px;
+    width: 45px;
+    height: 45px;
     border-radius: 50%;
     cursor: pointer;
     display: flex;

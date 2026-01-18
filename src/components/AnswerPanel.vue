@@ -37,7 +37,7 @@ const onAnswerClick = (opt) => {
 <style scoped>
 .answer-panel {
   position: absolute;
-  bottom: 30px;
+  bottom: 12vh;
   left: 50%;
   transform: translateX(-50%);
   width: 90%;
@@ -57,11 +57,12 @@ const onAnswerClick = (opt) => {
   border: 2px solid var(--primary-color);
   color: var(--primary-color);
   font-size: 2.5rem;
-  padding: 0.8rem 2rem;
+  padding: 0.8rem 1rem;
   border-radius: 12px;
   cursor: pointer;
   backdrop-filter: blur(5px);
-  min-width: 100px;
+  min-width: 60px;
+  flex: 1;
   transition: all 0.1s;
   font-family: inherit;
   font-weight: bold;
