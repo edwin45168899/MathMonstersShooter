@@ -131,11 +131,12 @@ export class GameEngine {
 
         // Monster radius is ~40. Diameter ~80. 
         // Base gap ~200.
-        // Rule: Reduce gap by 1/10 for every 10 kills (every level).
-        // Formula: 200 * (0.9 ^ (level - 1))
-        // Hard limit: 90 (slightly more than diameter to prevent overlap)
+        // Rule: Reduce gap by 1% per kill. (Equivalent to ~10% per 10 kills).
+        // Formula: 200 * (0.99 ^ score/10) -- assuming score is 10 per kill.
+        // Kills = this.score / 10.
+        const kills = Math.floor(this.score / 10);
         const baseGap = 200;
-        const dynamicGap = baseGap * Math.pow(0.9, this.level - 1);
+        const dynamicGap = baseGap * Math.pow(0.99, kills);
         const minGap = Math.max(90, dynamicGap);
 
         const canSpawn = (highestY === Infinity) || (highestY > (-50 + minGap));
@@ -196,8 +197,14 @@ export class GameEngine {
     }
 
     getRandomColor() {
-        // Darker shades to ensure white text is readable
-        const colors = ['#C62828', '#1565C0', '#2E7D32', '#EF6C00', '#6A1B9A'];
+        // Pastel / Macaron colors (Cute)
+        const colors = [
+            '#FFB7E1', // Pink
+            '#A2E8FA', // Cyan
+            '#D7F9F1', // Mint
+            '#FFF5BA', // Cream Yellow
+            '#E0BBE4'  // Lavender
+        ];
         return colors[Math.floor(Math.random() * colors.length)];
     }
 
@@ -233,16 +240,31 @@ export class GameEngine {
     draw() {
         this.ctx.clearRect(0, 0, this.width, this.height);
 
-        // Draw Player
+        // Draw Player (Cute Ship)
         const p = this.entityManager.player;
-        this.ctx.fillStyle = '#00F3FF';
+        const ctx = this.ctx;
 
-        this.ctx.beginPath();
-        this.ctx.moveTo(p.x, p.y - 40);
-        this.ctx.lineTo(p.x - 25, p.y + 20);
-        this.ctx.lineTo(p.x + 25, p.y + 20);
-        this.ctx.closePath();
-        this.ctx.fill();
+        ctx.fillStyle = '#FFB7E1'; // Pink body
+
+        // Body (Ellipse)
+        ctx.beginPath();
+        ctx.ellipse(p.x, p.y, 25, 35, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Wings (Rounded)
+        ctx.fillStyle = '#A2E8FA'; // Cyan wings
+        ctx.beginPath();
+        ctx.ellipse(p.x - 25, p.y + 10, 15, 10, -0.5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.ellipse(p.x + 25, p.y + 10, 15, 10, 0.5, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Cockpit window
+        ctx.fillStyle = '#FFFFFF';
+        ctx.beginPath();
+        ctx.arc(p.x, p.y - 10, 10, 0, Math.PI * 2);
+        ctx.fill();
 
         // Draw Monsters
         this.ctx.font = 'bold 24px "Arial Rounded MT Bold", "ZhuyinFont", sans-serif';
@@ -253,13 +275,53 @@ export class GameEngine {
             if (!m.alive) continue;
 
             this.ctx.fillStyle = m.color;
+
+            // Draw Monster Body (Circle)
             this.ctx.beginPath();
             this.ctx.arc(m.x, m.y, m.radius * m.scale, 0, Math.PI * 2);
             this.ctx.fill();
 
+            // Draw Ears (Cute Bear Style)
+            const r = m.radius * m.scale;
+            this.ctx.beginPath();
+            this.ctx.arc(m.x - r * 0.7, m.y - r * 0.7, r * 0.4, 0, Math.PI * 2); // Left ear
+            this.ctx.arc(m.x + r * 0.7, m.y - r * 0.7, r * 0.4, 0, Math.PI * 2); // Right ear
+            this.ctx.fill();
 
-            this.ctx.fillStyle = '#FFFFFF';
+            // Draw a cute face? 
+            // Just eyes are enough to suggest "Monster" without cluttering the Equation
+            // Actually, the equation is in the center. We can draw eyes above the equation?
+            // Equation is 'bold 24px'. It takes center space.
+            // Let's keep it simple shape-wise to readable text.
+            // The "Ears" make it cute enough.
+
             if (m.scale > 0.8) {
+                // Text Background for clarity
+                const textW = this.ctx.measureText(m.equation).width;
+                const textH = 26; // Approx font height
+                const padding = 10;
+
+                const bx = m.x - textW / 2 - padding / 2;
+                const by = m.y - textH / 2;
+                const bw = textW + padding;
+                const bh = textH;
+                const br = 8;
+
+                this.ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
+                this.ctx.beginPath();
+                this.ctx.moveTo(bx + br, by);
+                this.ctx.lineTo(bx + bw - br, by);
+                this.ctx.quadraticCurveTo(bx + bw, by, bx + bw, by + br);
+                this.ctx.lineTo(bx + bw, by + bh - br);
+                this.ctx.quadraticCurveTo(bx + bw, by + bh, bx + bw - br, by + bh);
+                this.ctx.lineTo(bx + br, by + bh);
+                this.ctx.quadraticCurveTo(bx, by + bh, bx, by + bh - br);
+                this.ctx.lineTo(bx, by + br);
+                this.ctx.quadraticCurveTo(bx, by, bx + br, by);
+                this.ctx.closePath();
+                this.ctx.fill();
+
+                this.ctx.fillStyle = '#4A4A4A'; // Dark text
                 this.ctx.fillText(m.equation, m.x, m.y);
             }
         }

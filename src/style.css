@@ -7,15 +7,17 @@
 }
 
 :root {
-  --bg-color: #121212;
-  /* Neutral Dark */
-  --primary-color: #FFFFFF;
-  /* High Contrast White */
-  --secondary-color: #FFD700;
-  /* Gold Accent */
-  --text-color: #ffffff;
-  --glass-bg: rgba(60, 60, 60, 0.3);
-  --glass-border: rgba(255, 255, 255, 0.4);
+  /* Cute/Pastel Theme */
+  --bg-color: #2D2436;
+  /* Deep Warm Purple (Neutral but cute base) */
+  --primary-color: #FFB7E1;
+  /* Pastel Pink (Text/Border) */
+  --secondary-color: #A2E8FA;
+  /* Pastel Cyan (Accents) */
+  --text-color: #FFFFFF;
+  --glass-bg: rgba(255, 183, 225, 0.15);
+  /* Pinkish glass */
+  --glass-border: rgba(255, 255, 255, 0.5);
   --font-main: 'Arial Rounded MT Bold', 'ZhuyinFont', 'Helvetica Rounded', Arial, sans-serif;
 }
 
