@@ -520,6 +520,7 @@ export class GameEngine {
                 this.ctx.fill();
             }
 
+            const textOffsetY = 25; // 文字向下偏移量
             if (m.scale > 0.8) {
                 // 為算式增加背景半透明圓角框，確保在任何背景顏色下都清晰
                 const textW = this.ctx.measureText(m.equation).width;
@@ -527,7 +528,7 @@ export class GameEngine {
                 const padding = 10;
 
                 const bx = m.x - textW / 2 - padding / 2;
-                const by = m.y - textH / 2;
+                const by = m.y - textH / 2 + textOffsetY;
                 const bw = textW + padding;
                 const bh = textH;
                 const br = 8;
@@ -547,13 +548,13 @@ export class GameEngine {
                 this.ctx.fill();
 
                 this.ctx.fillStyle = '#4A4A4A'; // 算式文字顏色 (深灰色)
-                this.ctx.fillText(m.equation, m.x, m.y);
+                this.ctx.fillText(m.equation, m.x, m.y + textOffsetY);
             }
 
             // 繪製瞄準提示 (下方的紅色橫線)
             if (m === this.targetMonster) {
                 const textW = this.ctx.measureText(m.equation).width;
-                const lineY = m.y + (fs * 0.6);
+                const lineY = m.y + textOffsetY + (fs * 0.6); // 跟隨文字位置移動
 
                 this.ctx.strokeStyle = '#FF3366';
                 this.ctx.lineWidth = 4;
